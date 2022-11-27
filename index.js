@@ -19,6 +19,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const categories = client.db('pcMama').collection('categories');
+        const bookingsCollection=client.db('pcMama').collection('bookings')
 
 
         app.get('/categories/:id', async (req, res) => {
@@ -30,6 +31,22 @@ async function run() {
             console.log(query)
             res.send(result)
             console.log(result)
+        });
+
+        app.post('/bookings',async(req,res)=>{
+            const booking=req.body;
+            console.log(booking)
+
+            // const query={
+            //     customerName:booking.product
+            // }
+            // const alreadyBooked=await bookingsCollection.find(query).toArray();
+            // if(alreadyBooked.length){
+            //     const message=`you already have an order in this product!Try another one.`
+            //     res.send({acknowledged:false,message})
+            // }
+            const result= await bookingsCollection.insertOne(booking);
+            res.send(result);
         })
 
     }
